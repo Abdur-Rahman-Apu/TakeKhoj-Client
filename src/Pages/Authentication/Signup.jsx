@@ -83,7 +83,7 @@ const Signup = () => {
       </FormControl>
 
       {/* upload picture  */}
-      <FormControl isRequired>
+      <FormControl>
         <FormLabel>Upload your picture</FormLabel>
 
         <Input

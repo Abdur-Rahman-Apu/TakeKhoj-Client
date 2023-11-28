@@ -16,7 +16,7 @@ const Home = () => {
   const path = useLocation().pathname;
   return (
     <Flex
-      bg={"#a9b1ec"}
+      bg={"primary"}
       w={"100%"}
       minH={"100vh"}
       justify={"center"}
@@ -31,21 +31,19 @@ const Home = () => {
         borderRadius={"lg"}
         my={10}
       >
-        <Flex h={"100%"}>
+        <VStack>
+          <Box w={"70px"} mt={7}>
+            <Image src={logo} alt="logo of the website" objectFit={"cover"} />
+          </Box>
+          <Heading fontFamily={"revert-layer"} fontSize={34} mt={4} mb={8}>
+            {path.includes("/signUp")
+              ? "Create a new account"
+              : "Welcome Back!"}
+          </Heading>
+        </VStack>
+        <Flex h={"100%"} align={"center"}>
           <Box flexBasis={"60%"} py={6}>
             <VStack>
-              <Box w={"70px"}>
-                <Image
-                  src={logo}
-                  alt="logo of the website"
-                  objectFit={"cover"}
-                />
-              </Box>
-              <Heading fontFamily={"revert-layer"} fontSize={34} mt={4} mb={8}>
-                {path.includes("/signUp")
-                  ? "Create a new account"
-                  : "Welcome Back!"}
-              </Heading>
               <Outlet />
             </VStack>
           </Box>
