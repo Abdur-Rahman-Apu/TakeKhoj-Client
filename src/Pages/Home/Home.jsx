@@ -7,13 +7,23 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import RightSideImg from "../../assets/message.png";
 import logo from "../../assets/logo.jpg";
 
 const Home = () => {
   const path = useLocation().pathname;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (userInfo) {
+      navigate("/chatPage");
+    }
+  }, []);
   return (
     <Flex
       bg={"primary"}
