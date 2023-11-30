@@ -22,6 +22,8 @@ const Home = () => {
 
     if (userInfo) {
       navigate("/chatPage");
+    } else {
+      navigate("/");
     }
   }, []);
   return (

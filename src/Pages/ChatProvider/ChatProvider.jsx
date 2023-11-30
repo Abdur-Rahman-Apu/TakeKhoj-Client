@@ -5,17 +5,13 @@ const ChatContext = createContext();
 const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
 
-  useEffect(() => {
+  const isUserExist = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
-
-    if (!userInfo) {
-      location.href = "/";
-    }
-  }, []);
+  };
 
   return (
-    <ChatContext.Provider value={{ user, setUser }}>
+    <ChatContext.Provider value={{ user, setUser, isUserExist }}>
       {children}
     </ChatContext.Provider>
   );

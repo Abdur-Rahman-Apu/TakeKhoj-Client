@@ -62,7 +62,7 @@ const Login = () => {
         position: "bottom",
       });
       setLoading.off();
-      navigate("/chats");
+      navigate("/chatPage");
     } catch (error) {
       toast({
         title: "Failed to login",
