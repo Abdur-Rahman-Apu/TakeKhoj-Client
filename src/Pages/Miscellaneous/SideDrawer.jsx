@@ -76,6 +76,8 @@ const SideDrawer = () => {
         config
       );
 
+      console.log(data, "search");
+
       setLoading.off();
       setSearchResult(data);
     } catch (error) {
