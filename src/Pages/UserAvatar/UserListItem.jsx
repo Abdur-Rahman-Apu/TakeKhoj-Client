@@ -4,6 +4,7 @@ import React from "react";
 const UserListItem = ({ user, handleFunction }) => {
   return (
     <HStack
+      w={"full"}
       bg={"gray.100"}
       p={3}
       borderRadius={"xl"}
