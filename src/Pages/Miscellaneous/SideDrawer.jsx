@@ -18,6 +18,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spinner,
   VStack,
   useBoolean,
   useDisclosure,
@@ -35,11 +36,11 @@ import ChatLoading from "./ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
 
 const SideDrawer = () => {
-  const { user } = chatState();
+  const { user, setSelectedChat, chats, setChats } = chatState();
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useBoolean();
-  const [loadingChat, setLoadingChat] = useState();
+  const [loadingChat, setLoadingChat] = useBoolean();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -89,7 +90,41 @@ const SideDrawer = () => {
     }
   };
 
-  const accessChat = (userId) => {};
+  const accessChat = async (userId) => {
+    setLoadingChat.on();
+    console.log(userId);
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "http://localhost:5000/api/chat",
+        { userId },
+        config
+      );
+
+      if (!chats.find((c) => c._id === data._id)) {
+        setChats([data, ...chats]);
+      }
+
+      setSelectedChat(data);
+      setLoadingChat.off();
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Error happened",
+        description: error.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      setLoadingChat.off();
+    }
+  };
   return (
     <>
       <Box
@@ -166,6 +201,8 @@ const SideDrawer = () => {
                   />
                 ))
               )}
+
+              {loadingChat && <Spinner />}
             </VStack>
           </DrawerBody>
         </DrawerContent>

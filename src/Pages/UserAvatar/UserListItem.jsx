@@ -1,7 +1,7 @@
 import { Box, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 
-const UserListItem = ({ user }) => {
+const UserListItem = ({ user, handleFunction }) => {
   return (
     <HStack
       bg={"gray.100"}
@@ -10,6 +10,7 @@ const UserListItem = ({ user }) => {
       cursor={"pointer"}
       _hover={{ bg: "secondary", color: "white" }}
       overflow={"hidden"}
+      onClick={handleFunction}
     >
       <Image src={user.pic} alt={user.name} borderRadius={"full"} h={"50px"} />
       <VStack align={"flex-start"}>
