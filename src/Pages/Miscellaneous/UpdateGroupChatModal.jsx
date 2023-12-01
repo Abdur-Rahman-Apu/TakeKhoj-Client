@@ -33,11 +33,50 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   const [groupChatName, setGroupChatName] = useState();
   const [loadingRename, setLoadingRename] = useBoolean();
 
-  //   const [search, setSearch] = useState("");
+  const [fetchingData, setFetchingData] = useBoolean();
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useBoolean();
 
-  const handleRemove = (u) => {};
+  const handleRemove = async (wantToRemove) => {
+    if (selectedChat.groupAdmin._id !== user._id) {
+      toast({
+        title: "Only admin can remove users",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setFetchingData.on();
+    try {
+      const config = {
+        headers: {
+          authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `http://localhost:5000/api/chat/groupRemove`,
+        { chatId: selectedChat._id, userId: wantToRemove._id },
+        config
+      );
+
+      wantToRemove._id === user._id ? setSelectedChat() : setSelectedChat(data);
+
+      setFetchAgain.toggle();
+      setFetchingData.off();
+    } catch (error) {
+      toast({
+        title: "Failed to remove",
+        description: error.response.data.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      setFetchingData.off();
+    }
+  };
 
   const updateName = async () => {
     if (!groupChatName) return;
@@ -116,7 +155,58 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     }
   };
 
-  const handleAddUser = () => {};
+  const handleAddUser = async (wantToAdd) => {
+    console.log(selectedChat, "selected chat");
+    console.log(selectedChat.users.find((u) => u._id === wantToAdd));
+    console.log(wantToAdd);
+    if (selectedChat.users.find((u) => u._id === wantToAdd)) {
+      toast({
+        title: "User already exist",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (selectedChat.groupAdmin._id !== user._id) {
+      toast({
+        title: "Only admin can add users",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setFetchingData.on();
+    try {
+      const config = {
+        headers: {
+          authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `http://localhost:5000/api/chat/groupAdd`,
+        { chatId: selectedChat._id, userId: wantToAdd },
+        config
+      );
+
+      setSelectedChat(data);
+      setFetchAgain.toggle();
+      setFetchingData.off();
+    } catch (error) {
+      setFetchingData.off();
+      toast({
+        title: "Failed to update",
+        description: error.response.data.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
   return (
     <>
       <IconButton
